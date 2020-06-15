@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function(){
         let ingredientDiv = document.createElement('div')
         ingredientDiv.className = "ing-div"
         ingredientDiv.innerHTML = `
-        <img src="assets/images/${ingredient.image}" class="ing-img">
+        <img src="assets/images/${ingredient.image}" class="ing-img" data-id = ${ingredient.id} draggable="true">
         <br>${ingredient.name}`
         pantryContainer.append(ingredientDiv)
         // clickAndDrag(ingredientDiv)
@@ -33,20 +33,27 @@ document.addEventListener("DOMContentLoaded", function(){
         e.stopPropagation();
     }
 
-    function handleDrop(e) {
-        console.log(e.target)
-        const imgList = document.getElementsByClassName("ing-list")[0]
-        const imgAdded = document.createElement('img')   
-        imgAdded.className = "ing-img"
-        imgAdded.src = "assets/images/vanilla.png"
-        imgList.append(imgAdded)
-    }
- 
-    ingContainer.addEventListener('dragenter', preventDefault, false);
-    ingContainer.addEventListener('dragleave', preventDefault, false);
-    ingContainer.addEventListener('dragover', preventDefault, false);
-    ingContainer.addEventListener('drop', preventDefault, false);
 
-    ingContainer.addEventListener('drop', handleDrop, false);
+    document.addEventListener("dragstart", function (e){
+        if (e.target.className === "ing-img"){
+            e.dataTransfer.setData("ingredient", e.target.src)
+        }
+    })
 
+    document.addEventListener("dragover",function(e){
+        if (e.target.className === "ing-container"){
+            e.preventDefault();
+        }
+    })
+
+    document.addEventListener("drop", function(e){
+        if (e.target.className === "ing-container"){
+            e.preventDefault();
+             let imageSrc = e.dataTransfer.getData("ingredient")
+             const imgAdded = document.createElement('img')   
+            imgAdded.className = "ing-img"
+            imgAdded.src = imageSrc
+            ingContainer.append(imgAdded)
+        }
+    })
 })
