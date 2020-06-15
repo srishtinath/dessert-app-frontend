@@ -59,9 +59,21 @@ h1 {
 
 .ing-container {
   width: 50%;
-  height: 90%;
-  background-color: white;
-  opacity: 0.5;
+  height: 80%;
+  background-color:rgba(255, 255, 255, 0.5);
   text-align: center;
   padding: 10px;
+}
+
+.bowl-img {
+  max-width: 200px;
+  position: absolute;
+  bottom: 0;
+  left: 35%;
+  width: 300px;
+}
+
+.bake-button {
+  position: relative;
+  top: 80%;
 }
