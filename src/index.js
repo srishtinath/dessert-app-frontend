@@ -57,6 +57,25 @@ document.addEventListener("DOMContentLoaded", function(){
     fetchIngredients()
     fetchRecipes()
   
+    function renderDifficulty(number){
+        let difficulty;
+        switch (number) {
+            case 1:
+                difficulty = "Easy"
+                break;
+            case 2:
+                difficulty = "Medium"
+                break;
+            case 3:
+                difficulty = "Hard"
+                break; 
+            default:
+                difficulty = "Easy"
+                break;
+        }
+        recipeUl.innerText = `Difficulty: ${difficulty}`
+    }
+
     dropdown.addEventListener('change', function(e){
         const recipeId = parseInt(e.target.value)
         if (!isNaN(recipeId)){
@@ -65,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function(){
             .then(recipe => {
             // renderRecipeDirections(recipe.ingredients)
             fetchRecipeList(recipeId)
+            renderDifficulty(recipe.difficulty_level)
         })
         }
     })
