@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+  font-family: interstate, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  /* color: #134611; */
+}
+
+h1 {
+  text-align: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: flex-start;
+  float: left;
+  padding: 10px;
+  height:100vh;
+}
+
+.left, .right {
+  width: 25%;
+  background-color: #fcdcdb;
+}
+
+.right{
+  justify-content: flex-start;
+}
+
+.middle {
+  width: 50%;
+  background-image: url("https://image.freepik.com/free-photo/blurred-abstract-background-modern-kitchen-with-tabletop-space-display-your-products_91908-1263.jpg");
+  background-repeat: no-repeat;
+  background-size: 800px 100%;
+  background-color: #cccccc;
+}
+
+.pantry-container {
+  display: inline-flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ing-div {
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.ing-img {
+  max-height: 75px;
+  align-items: center;
+}
+
+.ing-container {
+  width: 50%;
+  height: 90%;
+  background-color: white;
+  opacity: 0.5;
+  text-align: center;
+  padding: 10px;
+}
