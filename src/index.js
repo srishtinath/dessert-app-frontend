@@ -10,8 +10,9 @@ let seconds = 0
 let minutes = 0
 let displaySeconds = 0
 let displayMinutes = 0
+let timer;
 let status = "stopped"
-const timer = document.getElementsByClassName("timer")[0]
+const timerDisplay = document.getElementsByClassName("timer")[0]
 const button = document.getElementById("baking-button")
 
 
@@ -20,8 +21,8 @@ const button = document.getElementById("baking-button")
 document.addEventListener("DOMContentLoaded", function(){
     console.log(button)
 
-function stopWatch(){
-    
+function startTimer(){
+
     seconds ++;
 
    if (seconds/60 === 1){
@@ -43,9 +44,24 @@ function stopWatch(){
         displayMinutes=minutes
      }
 
-   timer.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+   timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
    console.log(timer)
     
+   }
+
+
+   function timerOn(){
+    timer = window.setInterval(startTimer,1000)
+
+   }
+
+   function stopTimer(){
+        clearInterval(timer)
+        seconds = 0
+        minutes = 0
+        displaySeconds = "00"
+        displayMinutes = "00"
+    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
    }
 
     function fetchIngredients(){
@@ -100,12 +116,19 @@ function stopWatch(){
         let difficulty;
         switch (number) {
             case 1:
+            case 2:
+            case 3:
+            case 4:
                 difficulty = "Easy"
                 break;
-            case 2:
+            case 5:
+            case 6:
+            case 7:
                 difficulty = "Medium"
                 break;
-            case 3:
+            case 8:
+            case 9:
+            case 10:
                 difficulty = "Hard"
                 break; 
             default:
@@ -128,15 +151,9 @@ function stopWatch(){
         }
     })
     
-    // var timerNumber;
-
-        // button.addEventListener('click',function(e){
-        //  if (status === "stopped"){
-        //     timerNumber = window.setInterval(stopWatch,1000)}
-        // else {
-        //         clearInterval(timerNumber)
-        //     }
-        //     })
+        button.addEventListener('click',function(e){
+            timerOn()           
+            })
 
         document.addEventListener("dragstart", function(e){
         if (e.target.className === "ing-img"){
@@ -190,9 +207,11 @@ function stopWatch(){
        if (e.target.id === "submit-button") {
            console.log(recipeCompare)
            compareSubmission()
+           stopTimer()
        } else if (e.target.id === "empty-button") {
            recipeGuess = []
            ingContainer.innerHTML = ''
+           
        }
     })
 
@@ -204,7 +223,7 @@ function stopWatch(){
             recipeGuess = []
             ingContainer.innerHTML = ''
         } else {
-            status = "started"
+    
              alert("Try again :(")
             recipeGuess = []
             ingContainer.innerHTML = ''
