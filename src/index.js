@@ -6,7 +6,7 @@ const recipeInfo = document.getElementById("recipe-info")
 const dropdown = document.getElementById("recipes")
 let recipeGuess = []
 let recipeCompare = []
-let seconds = 0
+let seconds = 60
 let minutes = 0
 let displaySeconds = 0
 let displayMinutes = 0
@@ -19,46 +19,40 @@ const button = document.getElementById("baking-button")
 
 
 document.addEventListener("DOMContentLoaded", function(){
-    console.log(button)
 
 function startTimer(){
 
-    seconds ++;
-
+    seconds --;
    if (seconds/60 === 1){
        seconds = 0 
-       minutes ++;
+       minutes --;
    }
-
    if (seconds < 10){
        displaySeconds = "0" + seconds.toString()
    }
    else {
        displaySeconds=seconds
     }
-
     if (minutes < 10){
         displayMinutes = "0" + minutes.toString()
     }
     else {
         displayMinutes=minutes
      }
-
    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   console.log(timer)
-    
-   }
-
+   
+   if (displaySeconds < 10){
+       if (parseInt(displaySeconds) < 1){
+        stopTimer()
+        alert("something")}
+       }}
 
    function timerOn(){
     timer = window.setInterval(startTimer,1000)
-
    }
 
    function stopTimer(){
         clearInterval(timer)
-        seconds = 0
-        minutes = 0
         displaySeconds = "00"
         displayMinutes = "00"
     timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
@@ -119,16 +113,22 @@ function startTimer(){
             case 2:
             case 3:
             case 4:
+                seconds = 60
+                minutes = 0
                 difficulty = "Easy"
                 break;
             case 5:
             case 6:
             case 7:
+                seconds = 45
+                minutes = 0
                 difficulty = "Medium"
                 break;
             case 8:
             case 9:
             case 10:
+                seconds = 5
+                minutes = 0
                 difficulty = "Hard"
                 break; 
             default:
@@ -223,11 +223,11 @@ function startTimer(){
             recipeGuess = []
             ingContainer.innerHTML = ''
         } else {
-    
-             alert("Try again :(")
+            alert("Try again :(")
             recipeGuess = []
             ingContainer.innerHTML = ''
         }
     }
+
 })
 
