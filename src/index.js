@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.addEventListener("dragstart", function (e){
         if (e.target.className === "ing-img"){
+            document.getElementsByClassName = "timer"
+            let interval = setInterval(timer,1000);
             e.dataTransfer.setData("ingredient", e.target.src)
             e.dataTransfer.setData("id", e.target.dataset.id)
         }
