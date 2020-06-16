@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Let's make some dessert!</title>
+    <title>Let's bake!</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script defer type="text/javascript" src="src/index.js"></script>
   </head>
@@ -11,23 +11,43 @@
    <div class="column left">
     <div class="container">
         <img src="assets/images/bake-sale-clip-art-2.jpg" style="max-width: 100%; margin: auto;">
-        <h2>Recipe</h2>
+        <br>
+        <br>
         <h2>Instructions</h2>
+        <h4>The goal is to guess the right order of ingredients to make the recipe </h4>
+        <ul>
+          <li>Click on each ingredient and drag it over to the bowl</li>
+          <li>Once you're done guessing, click the "Let's bake it!" button</li>
+          <li>To clear the bowl, click on the "Empty bowl" button</li>
+        </ul>
+        <br>
+        <div class="recipe-container">
+        <h2>Recipes</h2>
+        <br>
+          <select name="recipe" id="recipes">
+            <option value="none" selected> Select a recipe </option>
+          </select>
 
+          <div id="recipe-info"><br></div>
+        </div>
+      </div>
     </div>
    </div>
    <div class="column middle">
      <div class="timer">The timer starts once you drag, and the faster you complete the greater the skill points you will acquire!</div>
     <h1>Add Ingredients Here</h1>
+    <br>
     <div class="ing-container">
         
-        <span><button class="bake-button">Let's bake it!</button></span>
     </div>
+    <span><button class="bake-button" id="submit-button">Let's bake it!</button></span>
+    <span><button class="bake-button" id="empty-button">Empty bowl</button></span>
     <img src="assets/images/mixin-removebg-preview.png" class="bowl-img">
     <br>
    </div>
    <div class="column right">
     <h1>Pantry</h1>
+    <br>
     <div class = "pantry-container" ondrop="ondrop(event)"  >
 
     </div>

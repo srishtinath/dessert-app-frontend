@@ -2,23 +2,25 @@ const baseUrl = "http://localhost:3000"
 const pantryContainer = document.getElementsByClassName("pantry-container")[0]
 const ingContainer = document.getElementsByClassName("ing-container")[0]
 const ingList = document.getElementsByClassName("ing-list")[0]
-const recipeGuess = []
-const recipeCompare = []
+const recipeInfo = document.getElementById("recipe-info")
+const dropdown = document.getElementById("recipes")
+let recipeGuess = []
+let recipeCompare = []
 
 document.addEventListener("DOMContentLoaded", function(){
 
     function fetchIngredients(){
         fetch(`${baseUrl}/ingredients`)
         .then(resp => resp.json())
-        .then(ingredients => renderIngredients(ingredients))
+        .then(ingredients => renderAllIngredients(ingredients))
     }
-
-    function renderIngredients(ingredients){
+    
+    function renderAllIngredients(ingredients){
         ingredients.forEach(ingredient => {
             renderIngredient(ingredient)
         });
     }
-
+    
     function renderIngredient(ingredient){
         let ingredientDiv = document.createElement('div')
         ingredientDiv.className = "ing-div"
@@ -27,15 +29,68 @@ document.addEventListener("DOMContentLoaded", function(){
         <br>${ingredient.name}`
         pantryContainer.append(ingredientDiv)
     }
-
-    fetchIngredients()
   
-    function preventDefault(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    function fetchRecipes(){
+        fetch(`${baseUrl}/recipes`)
+        .then(resp => resp.json())
+        .then(recipes => addToDropdown(recipes))
     }
 
-    document.addEventListener("dragstart", function (e){
+    function addToDropdown(recipes){
+        recipes.forEach(recipe => {
+            const recipeChoice = document.createElement('option')
+            recipeChoice.value = recipe.id
+            recipeChoice.innerHTML = recipe.name
+            dropdown.append(recipeChoice)
+        })
+    }
+
+    function renderRecipeDirections(ingredients){
+        recipeUl.innerHTML = ''
+        ingredients.forEach(ingredient => {
+            const ingLi = document.createElement('li')
+            ingLi.innerText = ingredient.name
+            recipeUl.append(ingLi)
+        })
+    }
+
+    fetchIngredients()
+    fetchRecipes()
+  
+    function renderDifficulty(number, size){
+        let difficulty;
+        switch (number) {
+            case 1:
+                difficulty = "Easy"
+                break;
+            case 2:
+                difficulty = "Medium"
+                break;
+            case 3:
+                difficulty = "Hard"
+                break; 
+            default:
+                difficulty = "Easy"
+                break;
+        }
+        recipeInfo.innerHTML = `<br>Difficulty: ${difficulty}
+        <br>Number of Ingredients: ${size}`
+    }
+
+    dropdown.addEventListener('change', function(e){
+        const recipeId = parseInt(e.target.value)
+        if (!isNaN(recipeId)){
+            fetch(`${baseUrl}/recipes/${recipeId}`)
+            .then(resp => resp.json())
+            .then(recipe => {
+            // renderRecipeDirections(recipe.ingredients)
+            fetchRecipeList(recipeId)
+            renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
+        })
+        }
+    })
+
+    document.addEventListener("dragstart", function(e){
         if (e.target.className === "ing-img"){
             document.getElementsByClassName = "timer"
             let interval = setInterval(timer,1000);
@@ -44,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     })
 
-    document.addEventListener("dragover",function(e){
+    document.addEventListener("dragover", function(e){
         if (e.target.className === "ing-container"){
             e.preventDefault();
         }
@@ -72,21 +127,23 @@ document.addEventListener("DOMContentLoaded", function(){
         })
     }
 
-    function fetchRecipeList(){
-        fetch(`${baseUrl}/recipes/1`)
+    function fetchRecipeList(recipeId){
+        fetch(`${baseUrl}/recipes/${recipeId}`)
         .then(resp => resp.json())
         .then(recipeList => {
+            recipeCompare = []
             recipeList.ingredients.forEach(ingredient => recipeCompare.push(ingredient.name))
         })
     }
 
-    fetchRecipeList()
-
     document.addEventListener('click', function(e){
-       if (e.target.className === "bake-button") {
-           console.log(e.target)
+       if (e.target.id === "submit-button") {
+           console.log(recipeCompare)
            compareSubmission()
-       } 
+       } else if (e.target.id === "empty-button") {
+           recipeGuess = []
+           ingContainer.innerHTML = ''
+       }
     })
 
     function compareSubmission(){
@@ -94,8 +151,12 @@ document.addEventListener("DOMContentLoaded", function(){
         let compareArray = JSON.stringify(recipeCompare)
         if (guessedArray == compareArray) {
             alert("YOU DID IT! You're amazing!")
+            recipeGuess = []
+            ingContainer.innerHTML = ''
         } else {
-            console.log("Try again :(")
+            alert("Try again :(")
+            recipeGuess = []
+            ingContainer.innerHTML = ''
         }
     }
 
