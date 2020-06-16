@@ -6,8 +6,49 @@ const recipeInfo = document.getElementById("recipe-info")
 const dropdown = document.getElementById("recipes")
 let recipeGuess = []
 let recipeCompare = []
+let seconds = 0
+let minutes = 0
+let displaySeconds = 0
+let displayMinutes = 0
+let status = "stopped"
+const timer = document.getElementsByClassName("timer")[0]
+const button = document.getElementById("baking-button")
+
+
+
 
 document.addEventListener("DOMContentLoaded", function(){
+    console.log(button)
+
+function stopWatch(){
+    if (status === "stopped"){
+    seconds ++;
+
+   if (seconds/60 === 1){
+       seconds = 0 
+       minutes ++;
+   }
+
+   if (seconds < 10){
+       displaySeconds = "0" + seconds.toString()
+   }
+   else {
+       displaySeconds=seconds
+    }
+
+    if (minutes < 10){
+        displayMinutes = "0" + minutes.toString()
+    }
+    else {
+        displayMinutes=minutes
+     }
+
+   timer.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+   console.log(timer)}
+    
+   }
+
+  
 
     function fetchIngredients(){
         fetch(`${baseUrl}/ingredients`)
@@ -83,38 +124,46 @@ document.addEventListener("DOMContentLoaded", function(){
             fetch(`${baseUrl}/recipes/${recipeId}`)
             .then(resp => resp.json())
             .then(recipe => {
-            // renderRecipeDirections(recipe.ingredients)
             fetchRecipeList(recipeId)
             renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
         })
         }
     })
+    
+    var timerNumber;
 
-    document.addEventListener("dragstart", function(e){
+        button.addEventListener('click',function(e){
+            status = "stopped"
+            timerNumber = window.setInterval(stopWatch,1000)
+            })
+
+        document.addEventListener("dragstart", function(e){
         if (e.target.className === "ing-img"){
-            document.getElementsByClassName = "timer"
-            let interval = setInterval(timer,1000);
             e.dataTransfer.setData("ingredient", e.target.src)
             e.dataTransfer.setData("id", e.target.dataset.id)
         }
     })
 
-    document.addEventListener("dragover", function(e){
+    
+        document.addEventListener("dragover", function(e){
         if (e.target.className === "ing-container"){
             e.preventDefault();
         }
     })
 
+
+
     document.addEventListener("drop", function(e){
         if (e.target.className === "ing-container"){
             e.preventDefault();
-                let imageSrc = e.dataTransfer.getData("ingredient")
-                let imageId = e.dataTransfer.getData("id")
-                const imgAdded = document.createElement('img')
-                imgAdded.className = "ing-img"
-                imgAdded.src = imageSrc
-                ingContainer.append(imgAdded)
-                addToArray(imageId)
+            let imageSrc = e.dataTransfer.getData("ingredient")
+            let imageId = e.dataTransfer.getData("id")
+            const imgAdded = document.createElement('img')
+            imgAdded.className = "ing-img"
+            imgAdded.src = imageSrc
+            ingContainer.append(imgAdded)
+            addToArray(imageId)
+
         }
     })
 
@@ -140,6 +189,11 @@ document.addEventListener("DOMContentLoaded", function(){
        if (e.target.id === "submit-button") {
            console.log(recipeCompare)
            compareSubmission()
+           status = "reset"
+            clearInterval(timerNumber)
+            timer.innerHTML = ""
+            console.log(timer)
+            stopWatch()
        } else if (e.target.id === "empty-button") {
            recipeGuess = []
            ingContainer.innerHTML = ''
@@ -154,10 +208,15 @@ document.addEventListener("DOMContentLoaded", function(){
             recipeGuess = []
             ingContainer.innerHTML = ''
         } else {
-            alert("Try again :(")
+            status = "reset"
+            clearInterval(timerNumber)
+            timer.innerHTML = ""
+            console.log(timer)
+            stopWatch()
+             alert("Try again :(")
             recipeGuess = []
             ingContainer.innerHTML = ''
         }
     }
-
 })
+
