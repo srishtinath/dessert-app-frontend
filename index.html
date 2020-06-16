@@ -25,7 +25,7 @@
         <h2>Recipes</h2>
         <br>
           <select name="recipe" id="recipes">
-            <option value="none" selected> Select a recipe </option>
+            <option value="none" selected disabled hidden> Select a recipe </option>
           </select>
 
           <div id="recipe-info"><br></div>
@@ -39,11 +39,19 @@
 
     <div class="timer"> </div>
     <br>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text"></div>
+      </div>
+
+    </div>
     <div class="ing-container">
         
       
     </div>
-    <span><button class="bake-button" id="submit-button">Put it in the oven!</button></span>
+
+    <span><button class="bake-button" id="submit-button">Let's bake it!</button></span>
     <span><button class="bake-button" id="empty-button">Empty bowl</button></span>
     <img src="assets/images/mixin-removebg-preview.png" class="bowl-img">
     <br>
