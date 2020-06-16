@@ -64,7 +64,6 @@ h1, h2 {
 
 .ing-img {
   height: 50px;
-  align-items: center;
 }
 
 .ing-container {
@@ -77,8 +76,7 @@ h1, h2 {
   align-items: center;
   justify-content: space-evenly;
   background-color:rgba(143, 124, 93, 0.3);
-  padding: 10px;
-  /* box-shadow: 5px 5px 5px 5px #888888; */
+  padding: 20px;
 }
 
 .ing-drag {
@@ -87,6 +85,18 @@ h1, h2 {
   width: 105%;
   border-color: black;
 }
+
+.add-contain {
+  position: relative;
+  font-size: x-small;
+  padding: 0px;
+}
+
+.dlt-ing{
+  position: absolute;
+  right: 1px;
+}
+
 
 .bowl-img {
   max-width: 200px;
@@ -104,12 +114,8 @@ h1, h2 {
 
 button {
   position: relative;
-  width: 130px;
 }
 
-/* .bake-button {
-  position: relative;
-} */
 
 .recipe-container {
   text-align: center;

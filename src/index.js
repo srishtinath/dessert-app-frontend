@@ -18,7 +18,6 @@ const button = document.getElementById("baking-button")
 
 document.addEventListener("DOMContentLoaded", function(){
     // Timer functions
-    console.log(button)
 
     function startTimer(){
     seconds ++;
@@ -172,12 +171,12 @@ document.addEventListener("DOMContentLoaded", function(){
             e.preventDefault();
             let imageSrc = e.dataTransfer.getData("ingredient")
             let imageId = e.dataTransfer.getData("id")
-            const imgAdded = document.createElement('img')
-            imgAdded.className = "ing-img"
-            imgAdded.src = imageSrc
-            ingDrag.append(imgAdded)
+            const imgSpan = document.createElement('span')
+            imgSpan.dataset.id = imageId
+            imgSpan.className = "add-contain"
+            imgSpan.innerHTML = `<img src="${imageSrc}" class="ing-img"><button class="dlt-ing" id=${imageId}>&times;</button>`
+            ingDrag.append(imgSpan)
             addToArray(imageId)
-
         }
     })
 
@@ -187,9 +186,22 @@ document.addEventListener("DOMContentLoaded", function(){
             .then(resp => resp.json())
             .then(ingredient => {
                 recipeGuess.push(ingredient.name)
-                console.log(recipeGuess)
+                const deleteButton = document.getElementById(ingredient.id)
+                deleteButton.dataset.name = ingredient.name
             })
         }
+    }
+
+
+    function removeFromArray(name){
+        let number = recipeGuess.findIndex(element => element === name)
+        recipeGuess.splice(number, 1)
+        console.log(recipeGuess)
+    }
+
+    function removefromDOM(id){
+        let imgDivToDelete = document.querySelector(`[data-id="${id}"]`)
+        imgDivToDelete.remove()
     }
 
     function fetchRecipeList(recipeId){
@@ -210,9 +222,15 @@ document.addEventListener("DOMContentLoaded", function(){
            recipeGuess = []
            ingDrag.innerHTML = ''
            
+       } else if (e.target.className === "dlt-ing") {
+           removeFromArray(e.target.dataset.name)
+           removefromDOM(parseInt(e.target.id))
        }
     })
 
+
+
+    // check entry logic
     let modal = document.getElementById("myModal");
     let modalText = document.getElementsByClassName("modal-text")[0]
     let btn = document.getElementById("submit-button");
@@ -268,20 +286,18 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
+    // modal styling
     function modalElements(){
         let span = document.getElementsByClassName("close")[0];
 
-        // When the user clicks on the button, open the modal
         btn.onclick = function() {
         modal.style.display = "block";
         }
 
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
         modal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
