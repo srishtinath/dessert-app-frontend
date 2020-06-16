@@ -30,7 +30,7 @@ h1, h2 {
 .right{
   width: 25%;
   align-items: center;
-  background-color: #c7b394;
+  background-color: #f8f3df;
 }
 
 .middle {
@@ -91,4 +91,49 @@ h1, h2 {
 
 .recipe-container {
   text-align: center;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 25%;
+  top: 0;
+  width: 50%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 50% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; 
+}
+
+.modal-text {
+  width: 75%;
+  height: 75%;
+  align-items: center;
+  justify-content: center;
+  background-color:rgba(255, 255, 255, 0.5);
+  padding: 10px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  align-self: center;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }

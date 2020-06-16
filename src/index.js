@@ -4,6 +4,7 @@ const ingContainer = document.getElementsByClassName("ing-container")[0]
 const ingList = document.getElementsByClassName("ing-list")[0]
 const recipeInfo = document.getElementById("recipe-info")
 const dropdown = document.getElementById("recipes")
+const submit = document.getElementById("submit-button")
 let recipeGuess = []
 let recipeCompare = []
 
@@ -45,17 +46,13 @@ document.addEventListener("DOMContentLoaded", function(){
         })
     }
 
-    function renderRecipeDirections(ingredients){
-        recipeUl.innerHTML = ''
-        ingredients.forEach(ingredient => {
-            const ingLi = document.createElement('li')
-            ingLi.innerText = ingredient.name
-            recipeUl.append(ingLi)
-        })
+    function disableSubmit(){
+        submit.disabled = true
     }
 
     fetchIngredients()
     fetchRecipes()
+    disableSubmit()
   
     function renderDifficulty(number, size){
         let difficulty;
@@ -80,10 +77,10 @@ document.addEventListener("DOMContentLoaded", function(){
     dropdown.addEventListener('change', function(e){
         const recipeId = parseInt(e.target.value)
         if (!isNaN(recipeId)){
+            submit.disabled = false
             fetch(`${baseUrl}/recipes/${recipeId}`)
             .then(resp => resp.json())
             .then(recipe => {
-            // renderRecipeDirections(recipe.ingredients)
             fetchRecipeList(recipeId)
             renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
         })
@@ -117,12 +114,14 @@ document.addEventListener("DOMContentLoaded", function(){
     })
 
     function addToArray(imageId){
-        fetch(`${baseUrl}/ingredients/${imageId}`)
-        .then(resp => resp.json())
-        .then(ingredient => {
-            recipeGuess.push(ingredient.name)
-            console.log(recipeGuess)
-        })
+        if (imageId){
+            fetch(`${baseUrl}/ingredients/${imageId}`)
+            .then(resp => resp.json())
+            .then(ingredient => {
+                recipeGuess.push(ingredient.name)
+                console.log(recipeGuess)
+            })
+        }
     }
 
     function fetchRecipeList(recipeId){
@@ -144,18 +143,81 @@ document.addEventListener("DOMContentLoaded", function(){
        }
     })
 
+    let modal = document.getElementById("myModal");
+    let modalText = document.getElementsByClassName("modal-text")[0]
+    let btn = document.getElementById("submit-button");
+
     function compareSubmission(){
         let guessedArray = JSON.stringify(recipeGuess)
         let compareArray = JSON.stringify(recipeCompare)
-        if (guessedArray == compareArray) {
-            alert("YOU DID IT! You're amazing!")
-            recipeGuess = []
-            ingContainer.innerHTML = ''
+        let message;
+
+        console.log(recipeCompare)
+        console.log(recipeGuess)
+        
+        
+        // check length 
+        if (recipeCompare.length === recipeGuess.length) {
+            message = "You have the right number of ingredients."
         } else {
-            alert("Try again :(")
-            recipeGuess = []
-            ingContainer.innerHTML = ''
+            message = "You don't have the right number of ingredients."
+        }
+            
+        // check if all ingredients are present
+        let booleanArray = []
+        recipeGuess.forEach(guess => {
+            booleanArray.push(recipeCompare.includes(guess))
+        });
+        if (booleanArray.includes(false) || booleanArray.length != recipeCompare.length){
+            message = message.concat(" You don't have all ingredients required for this recipe.")
+        } else {
+            message = message.concat(" You have all the right ingredients.")
+        }
+
+        // check if array elements are in the right order
+        if (guessedArray === compareArray) {
+            message = "YOU DID IT! NICE JOB!"
+        } else {
+            message = message.concat(" Not quite there yet...")
+        }
+
+        renderModalContent(message)
+        recipeGuess = []
+        ingContainer.innerHTML = ''
+        message = ''
+    }
+
+    function renderModalContent(string){
+        modalText.textContent = string
+        let modalBox = document.getElementsByClassName("modal-content")[0]
+        if (string === "YOU DID IT! NICE JOB!") {
+            modalBox.style.backgroundColor = "green"
+        } else {
+            modalBox.style.backgroundColor = "red"
         }
     }
+
+    function modalElements(){
+        let span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+        modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+    }
+
+    modalElements()
 
 })
