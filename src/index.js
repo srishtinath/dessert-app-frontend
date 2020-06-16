@@ -1,6 +1,6 @@
 const baseUrl = "http://localhost:3000"
 const pantryContainer = document.getElementsByClassName("pantry-container")[0]
-const ingContainer = document.getElementsByClassName("ing-container")[0]
+const ingDrag = document.getElementsByClassName("ing-drag")[0]
 const ingList = document.getElementsByClassName("ing-list")[0]
 const recipeInfo = document.getElementById("recipe-info")
 const dropdown = document.getElementById("recipes")
@@ -16,37 +16,32 @@ let status = "stopped"
 const timerDisplay = document.getElementsByClassName("timer")[0]
 const button = document.getElementById("baking-button")
 
-
-
-
 document.addEventListener("DOMContentLoaded", function(){
+    // Timer functions
     console.log(button)
 
-function startTimer(){
-
+    function startTimer(){
     seconds ++;
 
-   if (seconds/60 === 1){
-       seconds = 0 
-       minutes ++;
-   }
+    if (seconds/60 === 1){
+        seconds = 0 
+        minutes ++;
+    }
 
-   if (seconds < 10){
-       displaySeconds = "0" + seconds.toString()
-   }
-   else {
-       displaySeconds=seconds
+    if (seconds < 10){
+        displaySeconds = "0" + seconds.toString()
+    } else {
+        displaySeconds=seconds
     }
 
     if (minutes < 10){
         displayMinutes = "0" + minutes.toString()
-    }
-    else {
+    } else {
         displayMinutes=minutes
-     }
+    }
 
-   timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   console.log(timer)
+    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+    console.log(timer)
     
    }
 
@@ -65,6 +60,7 @@ function startTimer(){
     timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
    }
 
+   // fetch initial information
     function fetchIngredients(){
         fetch(`${baseUrl}/ingredients`)
         .then(resp => resp.json())
@@ -103,6 +99,7 @@ function startTimer(){
 
     function disableSubmit(){
         submit.disabled = true
+        button.disabled = true
     }
 
     fetchIngredients()
@@ -140,6 +137,7 @@ function startTimer(){
         const recipeId = parseInt(e.target.value)
         if (!isNaN(recipeId)){
             submit.disabled = false
+            button.disabled = false
             fetch(`${baseUrl}/recipes/${recipeId}`)
             .then(resp => resp.json())
             .then(recipe => {
@@ -162,7 +160,7 @@ function startTimer(){
 
     
         document.addEventListener("dragover", function(e){
-        if (e.target.className === "ing-container"){
+        if (e.target.className === "ing-drag"){
             e.preventDefault();
         }
     })
@@ -170,14 +168,14 @@ function startTimer(){
 
 
     document.addEventListener("drop", function(e){
-        if (e.target.className === "ing-container"){
+        if (e.target.className === "ing-drag"){
             e.preventDefault();
             let imageSrc = e.dataTransfer.getData("ingredient")
             let imageId = e.dataTransfer.getData("id")
             const imgAdded = document.createElement('img')
             imgAdded.className = "ing-img"
             imgAdded.src = imageSrc
-            ingContainer.append(imgAdded)
+            ingDrag.append(imgAdded)
             addToArray(imageId)
 
         }
@@ -210,7 +208,7 @@ function startTimer(){
            stopTimer()
        } else if (e.target.id === "empty-button") {
            recipeGuess = []
-           ingContainer.innerHTML = ''
+           ingDrag.innerHTML = ''
            
        }
     })
@@ -255,18 +253,18 @@ function startTimer(){
 
         renderModalContent(message)
         recipeGuess = []
-        ingContainer.innerHTML = ''
+        ingDrag.innerHTML = ''
         message = ''
+
     }
-})
 
     function renderModalContent(string){
         modalText.textContent = string
         let modalBox = document.getElementsByClassName("modal-content")[0]
         if (string === "YOU DID IT! NICE JOB!") {
-            modalBox.style.backgroundColor = "green"
+            modalBox.style.backgroundColor = "#f8a3b9"
         } else {
-            modalBox.style.backgroundColor = "red"
+            modalBox.style.backgroundColor = "#8f7c5d"
         }
     }
 
@@ -285,9 +283,9 @@ function startTimer(){
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     }
 

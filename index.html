@@ -6,8 +6,16 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script defer type="text/javascript" src="src/index.js"></script>
   </head>
+
+
   <body>
-      <!-- <h1>Let's make some dessert!</h1> -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text"></div> <!-- end modal text -->
+      </div><!-- end modal content container -->
+
+    </div> <!-- end modal div -->
    <div class="column left">
     <div class="container">
         <img src="assets/images/bake-sale-clip-art-2.jpg" style="max-width: 100%; margin: auto;">
@@ -21,47 +29,44 @@
           <li>To clear the bowl, click on the "Empty bowl" button</li>
         </ul>
         <br>
+
         <div class="recipe-container">
-        <h2>Recipes</h2>
-        <br>
+          <h2>Recipes</h2>
+          <br>
           <select name="recipe" id="recipes">
             <option value="none" selected disabled hidden> Select a recipe </option>
           </select>
 
-          <div id="recipe-info"><br></div>
-        </div>
-      </div>
-    </div>
-   </div>
+            <div id="recipe-info"><br>
+            </div> <!-- end recipe info -->
+          <br>
+          <button class="begin-baking" id="baking-button">Let's start mixing!</button>
+        </div> <!-- end recipe container -->
+    </div> <!-- end container -->
+   </div><!-- end left column -->
+
    <div class="column middle">
-    <h1>Add Ingredients Here</h1>
-    <button class="begin-baking" id="baking-button">Let's start mixing!</button>
-
-    <div class="timer"> </div>
+    <div class="timer"> </div> <!-- end timer div -->
     <br>
-    <div id="myModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-text"></div>
-      </div>
 
-    </div>
     <div class="ing-container">
-        
-      
-    </div>
-
+    <div class="ing-drag"></div> <!-- end ing drag -->
+    
+    
     <span><button class="bake-button" id="submit-button">Let's bake it!</button></span>
     <span><button class="bake-button" id="empty-button">Empty bowl</button></span>
-    <img src="assets/images/mixin-removebg-preview.png" class="bowl-img">
-    <br>
-   </div>
-   <div class="column right">
-    <h1>Pantry</h1>
-    <br>
-    <div class = "pantry-container" ondrop="ondrop(event)"  >
+    </div> <!-- end ing container -->
+    <!-- <img src="assets/images/mixin-removebg-preview.png" class="bowl-img"> -->
+   </div> <!-- end middle column -->
 
-    </div>
-   </div>
+   <div class="column right">
+    <img src = "assets/images/bakery-elements_23-2147555141-removebg-preview.png" class="bake-sign">
+    
+    <div class = "pantry-container" ondrop="ondrop(event)"  >
+    <br>
+
+    </div> <!-- end pantry container -->
+   </div> <!-- end right column -->
+
   </body>
 </html>

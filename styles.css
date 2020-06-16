@@ -5,8 +5,8 @@
   font-style: normal;
   /* color: #134611; */
   margin: 0px;
-  
 }
+
 
 h1, h2 {
   text-align: center;
@@ -22,12 +22,7 @@ h1, h2 {
   height:100vh;
 }
 
-.left{
-  width: 25%;
-  background-color: #f8f3df;
-}
-
-.right{
+.left, .right{
   width: 25%;
   align-items: center;
   background-color: #f8f3df;
@@ -35,63 +30,86 @@ h1, h2 {
 
 .middle {
   width: 50%;
-  background-image: url("https://image.freepik.com/free-photo/blurred-abstract-background-modern-kitchen-with-tabletop-space-display-your-products_91908-1263.jpg");
+  background-image: url("assets/images/bakery-background.jpg");
   background-repeat: no-repeat;
-  background-size: 800px 100%;
+  background-position: center;
+  background-size: cover;
   background-color: #cccccc;
+  align-items: center;
+
 }
 
 .pantry-container {
   display: inline-flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-start;
-  background-color: #f8f3df;
-  width: 105%;
-  height: 75%;
-
+  justify-content: space-around;
+  background-color:rgba(255, 255, 255, 0.5);
+  width: 95%;
+  height: 87%;
+  padding: 10px;
+  position: relative;
+  top: 13%;
+  overflow: auto;
 }
 
 .ing-div {
   text-align: center;
-  padding: 10px;
-  margin: 10px;
+  padding: 2px;
+  margin: 2px;
   -ms-flex: 1;
   flex: 1;
+  font-size: small;
 }
 
 .ing-img {
-  max-height: 60px;
+  height: 50px;
   align-items: center;
-  max-width: 90%; 
-  height: auto;
-
 }
 
 .ing-container {
-  width: 75%;
-  height: 75%;
+  width: 90%;
+  height: 45%;
+  position: relative;
+  top: 16%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  background-color:rgba(255, 255, 255, 0.5);
+  justify-content: space-evenly;
+  background-color:rgba(143, 124, 93, 0.3);
   padding: 10px;
+  /* box-shadow: 5px 5px 5px 5px #888888; */
+}
+
+.ing-drag {
+  position: relative;
+  height: 93%;
+  width: 105%;
+  border-color: black;
 }
 
 .bowl-img {
   max-width: 200px;
-  position: absolute;
+  position: relative;
   bottom: 10%;
   left: 50%;
   width: 300px;
 }
 
-.bake-button {
-  position: relative;
-  width: 120px;
-  top: 50%;
+.bake-sign {
+  position: absolute;
+  top: 0;
+  z-index: 1;
 }
+
+button {
+  position: relative;
+  width: 130px;
+}
+
+/* .bake-button {
+  position: relative;
+} */
 
 .recipe-container {
   text-align: center;
@@ -105,14 +123,14 @@ h1, h2 {
   top: 0;
   width: 50%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  
+  background-color: rgb(199, 179, 148); /* Fallback color */
+  background-color: rgba(199,179,148,0.4); /* Black w/ opacity */
 }
 
 .modal-content {
   background-color: white;
-  margin: 50% auto; 
+  margin: 30% auto; 
   padding: 20px;
   border: 1px solid #888;
   width: 50%; 
