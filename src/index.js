@@ -2,7 +2,7 @@ const baseUrl = "http://localhost:3000"
 const pantryContainer = document.getElementsByClassName("pantry-container")[0]
 const ingContainer = document.getElementsByClassName("ing-container")[0]
 const ingList = document.getElementsByClassName("ing-list")[0]
-const recipeUl = document.getElementById("recipe-list")
+const recipeInfo = document.getElementById("recipe-info")
 const dropdown = document.getElementById("recipes")
 let recipeGuess = []
 let recipeCompare = []
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(){
     fetchIngredients()
     fetchRecipes()
   
-    function renderDifficulty(number){
+    function renderDifficulty(number, size){
         let difficulty;
         switch (number) {
             case 1:
@@ -73,7 +73,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 difficulty = "Easy"
                 break;
         }
-        recipeUl.innerText = `Difficulty: ${difficulty}`
+        recipeInfo.innerHTML = `<br>Difficulty: ${difficulty}
+        <br>Number of Ingredients: ${size}`
     }
 
     dropdown.addEventListener('change', function(e){
@@ -84,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function(){
             .then(recipe => {
             // renderRecipeDirections(recipe.ingredients)
             fetchRecipeList(recipeId)
-            renderDifficulty(recipe.difficulty_level)
+            renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
         })
         }
     })
