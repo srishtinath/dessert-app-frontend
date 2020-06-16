@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
     console.log(button)
 
 function stopWatch(){
-    if (status === "stopped"){
+    
     seconds ++;
 
    if (seconds/60 === 1){
@@ -44,11 +44,9 @@ function stopWatch(){
      }
 
    timer.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   console.log(timer)}
+   console.log(timer)
     
    }
-
-  
 
     function fetchIngredients(){
         fetch(`${baseUrl}/ingredients`)
@@ -130,12 +128,15 @@ function stopWatch(){
         }
     })
     
-    var timerNumber;
+    // var timerNumber;
 
-        button.addEventListener('click',function(e){
-            status = "stopped"
-            timerNumber = window.setInterval(stopWatch,1000)
-            })
+        // button.addEventListener('click',function(e){
+        //  if (status === "stopped"){
+        //     timerNumber = window.setInterval(stopWatch,1000)}
+        // else {
+        //         clearInterval(timerNumber)
+        //     }
+        //     })
 
         document.addEventListener("dragstart", function(e){
         if (e.target.className === "ing-img"){
@@ -189,11 +190,6 @@ function stopWatch(){
        if (e.target.id === "submit-button") {
            console.log(recipeCompare)
            compareSubmission()
-           status = "reset"
-            clearInterval(timerNumber)
-            timer.innerHTML = ""
-            console.log(timer)
-            stopWatch()
        } else if (e.target.id === "empty-button") {
            recipeGuess = []
            ingContainer.innerHTML = ''
@@ -208,11 +204,7 @@ function stopWatch(){
             recipeGuess = []
             ingContainer.innerHTML = ''
         } else {
-            status = "reset"
-            clearInterval(timerNumber)
-            timer.innerHTML = ""
-            console.log(timer)
-            stopWatch()
+            status = "started"
              alert("Try again :(")
             recipeGuess = []
             ingContainer.innerHTML = ''
