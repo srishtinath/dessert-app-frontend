@@ -95,7 +95,7 @@ ul {
 }
 
 .ing-container {
-  width: 90%;
+  width: 70%;
   height: 45%;
   position: relative;
   top: 16%;
@@ -109,8 +109,8 @@ ul {
 
 .ing-drag {
   position: relative;
-  height: 90%;
-  width: 90%;
+  height: 80%;
+  width: 80%;
   border-color: black;
 }
 
@@ -199,8 +199,9 @@ button {
   position: absolute;
   left: 26%;
   top: 15%;
-  width: 6%;
+  width: 8%;
   text-align: center;
+  align-content: center;
   z-index: 1;
 }
 
@@ -212,13 +213,27 @@ button {
   position: absolute;
   font-size: 1.25rem;
   color:#4b341a;
-  top: 18%;
-  left: 35%;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .timer {
-  color: plum;
+  color: #f8a3b9;
+  font-weight: bold;
   position: absolute;
-  top: 20%;
-  left: 60%;
+  padding: 5px;
+  top: 64%;
+  left: 52%;
+  z-index: 1;
+  background-color:rgba(255, 255, 255, 0.5);
+}
+
+.kitchen-banner {
+  position: absolute;
+  width: 35%;
+  height: 25%;
+  top: 8%;
+  opacity: 0.9;
+  z-index: 1;
 }

@@ -9,55 +9,55 @@ let recipeGuess = []
 let recipeCompare = []
 let seconds = 60
 let minutes = 0
-let displaySeconds = 0
-let displayMinutes = 0
+let displaySeconds = 00
+let displayMinutes = 00
 let timer;
 let timeTaken;
-const points = document.getElementById("skill-points")
 let skillPts = 0
+const points = document.getElementById("skill-points")
 const timerDisplay = document.getElementsByClassName("timer")[0]
 const button = document.getElementById("baking-button")
+const resetTimer = document.getElementById("reset-timer")
+const pauseTimerButton = document.getElementById("pause-timer")
+const emptyBowl = document.getElementById("empty-button")
 
 document.addEventListener("DOMContentLoaded", function(){
     // Timer functions
 
     function startTimer(){
-        seconds --;
-       if (seconds/60 === 1){
-           seconds = 0
-           minutes --;
-       }
-       if (seconds < 10){
-           displaySeconds = "0" + seconds.toString()
-       }
-       else {
+        if (seconds < 10){
+            displaySeconds = "0" + seconds.toString()
+        } else {
            displaySeconds=seconds
         }
         if (minutes < 10){
             displayMinutes = "0" + minutes.toString()
-        }
-        else {
+        } else {
             displayMinutes=minutes
-         }
-       timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-       redo()
+        }
+        seconds --;
+        timerDisplay.innerHTML = `Time remaining: ${displayMinutes}:${displaySeconds}`
+        redo()
     }
-
+    
     function getDifficulty(){
         if (recipeInfo.dataset.difficulty === "Easy"){
-            seconds = 60}
-        else if (recipeInfo.dataset.difficulty === "Medium"){
-            seconds = 45}
-        else {seconds = 30}
+            seconds = 60
+        } else if (recipeInfo.dataset.difficulty === "Medium"){
+            seconds = 45
+        } else {
+            seconds = 30
+        }
     }
-
+            
     function redo(){
         if (seconds < 1){
-            alert("You have ran out of time.Try again.")
+            alert("You ran out of time :( Try again.")
             stopTimer()
             getDifficulty()
-            }
+        }
     }
+            
     
     function skillPoints(seconds){
         if (seconds > 20 || seconds === 20){
@@ -78,15 +78,23 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
-   function timerOn(){
-    timer = window.setInterval(startTimer,1000)
+    function timerOn(){
+        timer = window.setInterval(startTimer, 1000)
+        resetTimer.disabled = false
+        pauseTimerButton.disabled = false
     }
 
     function stopTimer(){
         clearInterval(timer)
         displaySeconds = "00"
         displayMinutes = "00"
-        timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+        seconds = 0
+        timerDisplay.innerHTML = `Time remaining: ${displayMinutes}:${displaySeconds}`
+    }
+    
+    function pauseTimer(){
+        clearInterval(timer)
+        timerDisplay.innerHTML = `Time remaining: ${displayMinutes}:${displaySeconds}`
     }
 
 
@@ -130,6 +138,9 @@ document.addEventListener("DOMContentLoaded", function(){
     function disableSubmit(){
         submit.disabled = true
         button.disabled = true
+        resetTimer.disabled = true
+        pauseTimerButton.disabled = true
+        emptyBowl.disabled = true
     }
 
     fetchIngredients()
@@ -180,28 +191,33 @@ document.addEventListener("DOMContentLoaded", function(){
             .then(recipe => {
             fetchRecipeList(recipeId)
             renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
+            button.disabled = false
+            pauseTimer()
+            if (pauseTimerButton.innerText === "Resume Timer"){
+                pauseTimerButton.innerText = "Pause Timer"
+            }
         })
         }
     })
     
-        button.addEventListener('click',function(e){
-            timerOn()           
-            })
+    button.addEventListener('click', function(e){
+        getDifficulty()
+        timerOn()
+        button.disabled = true           
+        })
 
-        document.addEventListener("dragstart", function(e){
+    document.addEventListener("dragstart", function(e){
         if (e.target.className === "ing-img"){
             e.dataTransfer.setData("ingredient", e.target.src)
             e.dataTransfer.setData("id", e.target.dataset.id)
         }
     })
-
     
-        document.addEventListener("dragover", function(e){
+    document.addEventListener("dragover", function(e){
         if (e.target.className === "ing-drag"){
             e.preventDefault();
         }
     })
-
 
 
     document.addEventListener("drop", function(e){
@@ -215,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function(){
             imgSpan.innerHTML = `<img src="${imageSrc}" class="ing-img"><button class="dlt-ing" id=${imageId}>&times;</button>`
             ingDrag.append(imgSpan)
             addToArray(imageId)
+            emptyBowl.disabled = false
         }
     })
 
@@ -230,11 +247,9 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 
-
     function removeFromArray(name){
         let number = recipeGuess.findIndex(element => element === name)
         recipeGuess.splice(number, 1)
-        console.log(recipeGuess)
     }
 
     function removefromDOM(id){
@@ -253,19 +268,25 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.addEventListener('click', function(e){
        if (e.target.id === "submit-button") {
-           console.log(recipeCompare)
            compareSubmission()
-           stopTimer()
-       } else if (e.target.id === "empty-button") {
+        } else if (e.target.id === "empty-button") {
            recipeGuess = []
            ingDrag.innerHTML = ''
-       } else if (e.target.className === "dlt-ing") {
+        } else if(e.target.id === "pause-timer" && e.target.textContent === "Pause Timer") {
+            pauseTimer()
+            e.target.textContent = "Resume Timer"
+        } else if(e.target.id === "pause-timer" && e.target.textContent === "Resume Timer") {
+            timerOn()
+            e.target.textContent = "Pause Timer"
+        } else if(e.target.id === "reset-timer") {
+            getDifficulty()
+            displaySeconds = seconds
+            timerDisplay.innerText = `Time remaining: ${displayMinutes}:${displaySeconds}`
+        } else if (e.target.className === "dlt-ing") {
            removeFromArray(e.target.dataset.name)
            removefromDOM(parseInt(e.target.id))
-       }
+        }
     })
-
-
 
     // check entry logic
     let modal = document.getElementById("myModal");
@@ -283,34 +304,27 @@ document.addEventListener("DOMContentLoaded", function(){
             recipeGuess.forEach(guess => {
             booleanArray.push(recipeCompare.includes(guess))
             });
-            if (booleanArray.includes(false)) {
-                // You have the right number but wrong ingredients
+            // check ingredients
+            if (booleanArray.includes(false)) { 
                 message = "You have the right number but wrong ingredients. These are the correct ingredients so far:"
                 let rightIngred = recipeGuess.filter(guess => recipeCompare.includes(guess))
-                console.log(rightIngred)
-                message = message.concat(rightIngred)
-                // stopTimer()
-                // getDifficulty()
+                message = message.concat(rightIngred.join(" "))
+                
             } else {
-                // You have the right number and right ingredients
                 // check order
                 if (guessedArray === compareArray) {
-                    message = "YOU DID IT! NICE JOB!"
+                    message = "YOU DID IT! CONGRATULATIONS! You're ready to become a real patissier! Don't forget your pastry chef hat when applying to pastry school!"
                     const timeTaken = seconds
                     skillPoints(timeTaken)
                 } else {
                     // wrong order
                     message = "You have the right ingredients, but in the wrong order. These are ones you guessed correctly so far:"
                     let rightOrd = compareArrays(recipeGuess, recipeCompare)
-                    message = message.concat(rightOrd)
-                    // stopTimer()
-                    // getDifficulty()
+                    message = message.concat(rightOrd.join(" "))
                 }
             }
         } else {
             message = "You don't have the right number of ingredients. Try again."
-            // stopTimer()
-            // getDifficulty()
         }
         
         renderModalContent(message)
@@ -330,42 +344,6 @@ document.addEventListener("DOMContentLoaded", function(){
         return returnArray;
     }
 
-        function getDifficulty(){
-            if (recipeInfo.dataset.difficulty === "Easy"){
-                seconds = 60}
-            else if (recipeInfo.dataset.difficulty === "Medium"){
-                seconds = 45}
-            else {seconds = 30}
-        }
-
-         function redo(){
-            if (seconds < 1){
-            alert("You have ran out of time.Try again.") 
-            stopTimer()
-            getDifficulty()
-                }
-            }
-        
-            function skillPoints(seconds){
-                if (seconds > 20 || seconds === 20){
-                    skillPts = skillPts + 50
-                    points.innerHTML = `${skillPts}`
-                }
-                else if (seconds > 10 || seconds === 10 || seconds < 20){
-                    skillPts = skillPts + 20
-                    points.innerHTML = `${skillPts}`
-                }
-                else if (seconds > 5 || seconds < 10 || seconds === 5){
-                    skillPts = skillPts + 20
-                    points.innerHTML = `${skillPts}`
-                }
-                else if (seconds === 0){
-                    skillPts = skillPts + 0
-                    points.innerHTML = `${skillPts}`
-                }
-
-                }
-
 
     function renderModalContent(string){
         modalText.textContent = string
@@ -374,6 +352,7 @@ document.addEventListener("DOMContentLoaded", function(){
             modalBox.style.backgroundColor = "#f8a3b9"
         } else {
             modalBox.style.backgroundColor = "#8f7c5d"
+            
         }
     }
 
@@ -383,10 +362,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
         btn.onclick = function() {
         modal.style.display = "block";
+        pauseTimer()
         }
 
         span.onclick = function() {
         modal.style.display = "none";
+        timerOn()
         }
 
         window.onclick = function(event) {
