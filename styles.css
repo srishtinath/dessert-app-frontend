@@ -96,3 +96,18 @@ h1, h2 {
 .recipe-container {
   text-align: center;
 }
+
+#score-pts {
+  position: relative;
+  max-width:20%;
+  height:auto;
+  left: 80%;
+}
+
+#skill-points{
+  position: relative;
+  font-size: 1.25rem;
+  color: plum;
+  left: 85%;
+  bottom: -2%;
+}
