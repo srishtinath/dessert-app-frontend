@@ -128,8 +128,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 difficulty = "Easy"
                 break;
         }
-        recipeInfo.innerHTML = `<br>Difficulty: ${difficulty}
-        <br>Number of Ingredients: ${size}`
+        recipeInfo.innerHTML = `<br><h5>Difficulty: ${difficulty}</h5>
+        <h5>Number of Ingredients: ${size}</h5>`
     }
 
     dropdown.addEventListener('change', function(e){
