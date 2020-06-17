@@ -82,13 +82,12 @@ document.addEventListener("DOMContentLoaded", function(){
     timer = window.setInterval(startTimer,1000)
     }
 
-   function stopTimer(){
+    function stopTimer(){
         clearInterval(timer)
         displaySeconds = "00"
         displayMinutes = "00"
         timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
     }
-
 
 
    // fetch initial information
@@ -144,18 +143,21 @@ document.addEventListener("DOMContentLoaded", function(){
             case 2:
             case 3:
             case 4:
+                seconds = 60
                 difficulty = "Easy"
                 seconds = 60
                 break;
             case 5:
             case 6:
             case 7:
+                seconds = 45
                 difficulty = "Medium"
                 seconds = 45
                 break;
             case 8:
             case 9:
             case 10:
+                seconds = 30
                 difficulty = "Hard"
                 seconds = 30
                 break; 
@@ -327,6 +329,43 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         return returnArray;
     }
+
+        function getDifficulty(){
+            if (recipeInfo.dataset.difficulty === "Easy"){
+                seconds = 60}
+            else if (recipeInfo.dataset.difficulty === "Medium"){
+                seconds = 45}
+            else {seconds = 30}
+        }
+
+         function redo(){
+            if (seconds < 1){
+            alert("You have ran out of time.Try again.") 
+            stopTimer()
+            getDifficulty()
+                }
+            }
+        
+            function skillPoints(seconds){
+                if (seconds > 20 || seconds === 20){
+                    skillPts = skillPts + 50
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds > 10 || seconds === 10 || seconds < 20){
+                    skillPts = skillPts + 20
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds > 5 || seconds < 10 || seconds === 5){
+                    skillPts = skillPts + 20
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds === 0){
+                    skillPts = skillPts + 0
+                    points.innerHTML = `${skillPts}`
+                }
+
+                }
+
 
     function renderModalContent(string){
         modalText.textContent = string
