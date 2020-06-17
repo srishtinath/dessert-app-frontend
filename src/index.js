@@ -239,41 +239,50 @@ document.addEventListener("DOMContentLoaded", function(){
         let guessedArray = JSON.stringify(recipeGuess)
         let compareArray = JSON.stringify(recipeCompare)
         let message;
-
-        console.log(recipeCompare)
-        console.log(recipeGuess)
-        
         
         // check length 
         if (recipeCompare.length === recipeGuess.length) {
-            message = "You have the right number of ingredients."
-        } else {
-            message = "You don't have the right number of ingredients."
-        }
-            
-        // check if all ingredients are present
-        let booleanArray = []
-        recipeGuess.forEach(guess => {
+            let booleanArray = []
+            recipeGuess.forEach(guess => {
             booleanArray.push(recipeCompare.includes(guess))
-        });
-        if (booleanArray.includes(false) || booleanArray.length != recipeCompare.length){
-            message = message.concat(" You don't have all ingredients required for this recipe.")
+            });
+            if (booleanArray.includes(false)) {
+                // You have the right number but wrong ingredients
+                message = "You have the right number but wrong ingredients. These are the correct ingredients so far:"
+                let rightIngred = recipeGuess.filter(guess => recipeCompare.includes(guess))
+                console.log(rightIngred)
+                message = message.concat(rightIngred)
+            } else {
+                // You have the right number and right ingredients
+                // check order
+                if (guessedArray === compareArray) {
+                    message = "YOU DID IT! NICE JOB!"
+                } else {
+                    // wrong order
+                    message = "You have the right ingredients, but in the wrong order. These are ones you guessed correctly so far:"
+                    let rightOrd = compareArrays(recipeGuess, recipeCompare)
+                    message = message.concat(rightOrd)
+                }
+            }
         } else {
-            message = message.concat(" You have all the right ingredients.")
+            message = "You don't have the right number of ingredients. Try again."
         }
-
-        // check if array elements are in the right order
-        if (guessedArray === compareArray) {
-            message = "YOU DID IT! NICE JOB!"
-        } else {
-            message = message.concat(" Not quite there yet...")
-        }
-
+        
         renderModalContent(message)
         recipeGuess = []
         ingDrag.innerHTML = ''
         message = ''
 
+    }
+
+    function compareArrays(guessArray, compareArray){
+        let returnArray = []
+        for (const guess of guessArray) {
+            if (compareArray.indexOf(guess) === guessArray.indexOf(guess)) {
+                returnArray.push(guess);
+            }
+        }
+        return returnArray;
     }
 
     function renderModalContent(string){
