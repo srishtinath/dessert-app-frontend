@@ -77,7 +77,7 @@ ul {
   height: 87%;
   padding: 10px;
   position: relative;
-  top: 13%;
+  top: 2%;
   overflow: auto;
 }
 
@@ -136,7 +136,8 @@ ul {
 
 .bake-sign {
   position: absolute;
-  top: 0;
+  width: 25%;
+  bottom: 0;
   z-index: 1;
 }
 
@@ -197,7 +198,7 @@ button {
 
 .skill-container{
   position: absolute;
-  left: 26%;
+  right: 32%;
   top: 15%;
   width: 8%;
   text-align: center;
@@ -206,7 +207,6 @@ button {
 }
 
 #score-pts {
-  /* position: relative; */
   max-width:100%;
 }
 #skill-points{
@@ -231,9 +231,10 @@ button {
 
 .kitchen-banner {
   position: absolute;
-  width: 35%;
-  height: 25%;
-  top: 8%;
+  width: 30%;
+  /* height: 25%; */
+  top: 10%;
+  left: 30%;
   opacity: 0.9;
   z-index: 1;
 }
