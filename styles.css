@@ -141,3 +141,17 @@ h1, h2 {
   text-decoration: none;
   cursor: pointer;
 }
+#score-pts {
+  position: relative;
+  max-width:20%;
+  height:auto;
+  left: 80%;
+}
+
+#skill-points{
+  position: relative;
+  font-size: 1.25rem;
+  color: plum;
+  left: 85%;
+  bottom: -2%;
+}

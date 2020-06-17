@@ -13,10 +13,13 @@ let displaySeconds = 0
 let displayMinutes = 0
 let timer;
 let status = "stopped"
+let timeTaken;
+
+const points = document.getElementById("skill-points")
+let skillPts = 0
+
 const timerDisplay = document.getElementsByClassName("timer")[0]
 const button = document.getElementById("baking-button")
-
-
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -40,24 +43,21 @@ function startTimer(){
     else {
         displayMinutes=minutes
      }
-   timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   
-   if (displaySeconds < 10){
-       if (parseInt(displaySeconds) < 1){
-        stopTimer()
-        alert("something")}
-       }}
+   timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`  
+   redo()
+}
 
-   function timerOn(){
-    timer = window.setInterval(startTimer,1000)
-   }
 
-   function stopTimer(){
+    function timerOn(){
+        timer = window.setInterval(startTimer,1000)
+    }
+
+    function stopTimer(){
         clearInterval(timer)
         displaySeconds = "00"
         displayMinutes = "00"
-    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   }
+        timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+    }
 
     function fetchIngredients(){
         fetch(`${baseUrl}/ingredients`)
@@ -111,21 +111,18 @@ function startTimer(){
             case 3:
             case 4:
                 seconds = 60
-                minutes = 0
                 difficulty = "Easy"
                 break;
             case 5:
             case 6:
             case 7:
                 seconds = 45
-                minutes = 0
                 difficulty = "Medium"
                 break;
             case 8:
             case 9:
             case 10:
-                seconds = 5
-                minutes = 0
+                seconds = 30
                 difficulty = "Hard"
                 break; 
             default:
@@ -134,6 +131,7 @@ function startTimer(){
         }
         recipeInfo.innerHTML = `<br>Difficulty: ${difficulty}
         <br>Number of Ingredients: ${size}`
+        recipeInfo.dataset.difficulty = difficulty
     }
 
     dropdown.addEventListener('change', function(e){
@@ -222,35 +220,14 @@ function startTimer(){
     function compareSubmission(){
         let guessedArray = JSON.stringify(recipeGuess)
         let compareArray = JSON.stringify(recipeCompare)
-        let message;
-
-        console.log(recipeCompare)
-        console.log(recipeGuess)
-        
-        
-        // check length 
-        if (recipeCompare.length === recipeGuess.length) {
-            message = "You have the right number of ingredients."
+        if (guessedArray == compareArray) {
+            alert("YOU DID IT! You're amazing!")
+            const timeTaken = seconds
+            skillPoints(timeTaken)
+            recipeGuess = []
+            ingContainer.innerHTML = ''
         } else {
-            message = "You don't have the right number of ingredients."
-        }
-            
-        // check if all ingredients are present
-        let booleanArray = []
-        recipeGuess.forEach(guess => {
-            booleanArray.push(recipeCompare.includes(guess))
-        });
-        if (booleanArray.includes(false) || booleanArray.length != recipeCompare.length){
-            message = message.concat(" You don't have all ingredients required for this recipe.")
-        } else {
-            message = message.concat(" You have all the right ingredients.")
-        }
-
-        // check if array elements are in the right order
-        if (guessedArray === compareArray) {
-            message = "YOU DID IT! NICE JOB!"
-        } else {
-            message = message.concat(" Not quite there yet...")
+            getDifficulty()
             alert("Try again :(")
             recipeGuess = []
             ingContainer.innerHTML = ''
@@ -262,7 +239,42 @@ function startTimer(){
         message = ''
     }
 
-})
+        function getDifficulty(){
+            if (recipeInfo.dataset.difficulty === "Easy"){
+                seconds = 60}
+            else if (recipeInfo.dataset.difficulty === "Medium"){
+                seconds = 45}
+            else {seconds = 30}
+        }
+
+         function redo(){
+            if (seconds < 1){
+            alert("You have ran out of time.Try again.") 
+            stopTimer()
+            getDifficulty()
+                }
+            }
+        
+            function skillPoints(seconds){
+                if (seconds > 20 || seconds === 20){
+                    skillPts = skillPts + 50
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds > 10 || seconds === 10 || seconds < 20){
+                    skillPts = skillPts + 20
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds > 5 || seconds < 10 || seconds === 5){
+                    skillPts = skillPts + 20
+                    points.innerHTML = `${skillPts}`
+                }
+                else if (seconds === 0){
+                    skillPts = skillPts + 0
+                    points.innerHTML = `${skillPts}`
+                }
+
+                }
+
 
     function renderModalContent(string){
         modalText.textContent = string
