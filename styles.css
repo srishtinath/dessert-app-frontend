@@ -164,8 +164,8 @@ button {
 
 .modal-content {
   background-color: white;
-  margin: 30% auto; 
-  padding: 20px;
+  margin: 40% auto; 
+  padding: 10px;
   border: 1px solid #888;
   width: 50%; 
 }
@@ -175,8 +175,8 @@ button {
   height: 75%;
   align-items: center;
   justify-content: center;
-  background-color:rgba(255, 255, 255, 0.5);
   padding: 10px;
+  font-size: small;
 }
 
 .close {
