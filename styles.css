@@ -109,8 +109,8 @@ ul {
 
 .ing-drag {
   position: relative;
-  height: 93%;
-  width: 105%;
+  height: 90%;
+  width: 90%;
   border-color: black;
 }
 
@@ -177,6 +177,7 @@ button {
   justify-content: center;
   padding: 10px;
   font-size: small;
+  color: azure;
 }
 
 .close {
@@ -192,4 +193,32 @@ button {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.skill-container{
+  position: absolute;
+  left: 26%;
+  top: 15%;
+  width: 6%;
+  text-align: center;
+  z-index: 1;
+}
+
+#score-pts {
+  /* position: relative; */
+  max-width:100%;
+}
+#skill-points{
+  position: absolute;
+  font-size: 1.25rem;
+  color:#4b341a;
+  top: 18%;
+  left: 35%;
+}
+
+.timer {
+  color: plum;
+  position: absolute;
+  top: 20%;
+  left: 60%;
 }

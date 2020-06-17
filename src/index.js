@@ -7,12 +7,14 @@ const dropdown = document.getElementById("recipes")
 const submit = document.getElementById("submit-button")
 let recipeGuess = []
 let recipeCompare = []
-let seconds = 0
+let seconds = 60
 let minutes = 0
 let displaySeconds = 0
 let displayMinutes = 0
 let timer;
-let status = "stopped"
+let timeTaken;
+const points = document.getElementById("skill-points")
+let skillPts = 0
 const timerDisplay = document.getElementsByClassName("timer")[0]
 const button = document.getElementById("baking-button")
 
@@ -20,44 +22,74 @@ document.addEventListener("DOMContentLoaded", function(){
     // Timer functions
 
     function startTimer(){
-    seconds ++;
-
-    if (seconds/60 === 1){
-        seconds = 0 
-        minutes ++;
+        seconds --;
+       if (seconds/60 === 1){
+           seconds = 0
+           minutes --;
+       }
+       if (seconds < 10){
+           displaySeconds = "0" + seconds.toString()
+       }
+       else {
+           displaySeconds=seconds
+        }
+        if (minutes < 10){
+            displayMinutes = "0" + minutes.toString()
+        }
+        else {
+            displayMinutes=minutes
+         }
+       timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+       redo()
     }
 
-    if (seconds < 10){
-        displaySeconds = "0" + seconds.toString()
-    } else {
-        displaySeconds=seconds
+    function getDifficulty(){
+        if (recipeInfo.dataset.difficulty === "Easy"){
+            seconds = 60}
+        else if (recipeInfo.dataset.difficulty === "Medium"){
+            seconds = 45}
+        else {seconds = 30}
     }
 
-    if (minutes < 10){
-        displayMinutes = "0" + minutes.toString()
-    } else {
-        displayMinutes=minutes
+    function redo(){
+        if (seconds < 1){
+            alert("You have ran out of time.Try again.")
+            stopTimer()
+            getDifficulty()
+            }
     }
-
-    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-    console.log(timer)
     
-   }
-
+    function skillPoints(seconds){
+        if (seconds > 20 || seconds === 20){
+            skillPts = skillPts + 50
+            points.innerHTML = `${skillPts}`
+        }
+        else if (seconds > 10 || seconds === 10 || seconds < 20){
+            skillPts = skillPts + 20
+            points.innerHTML = `${skillPts}`
+        }
+        else if (seconds > 5 || seconds < 10 || seconds === 5){
+            skillPts = skillPts + 20
+            points.innerHTML = `${skillPts}`
+        }
+        else if (seconds === 0){
+            skillPts = skillPts + 0
+            points.innerHTML = `${skillPts}`
+        }
+    }
 
    function timerOn(){
     timer = window.setInterval(startTimer,1000)
-
-   }
+    }
 
    function stopTimer(){
         clearInterval(timer)
-        seconds = 0
-        minutes = 0
         displaySeconds = "00"
         displayMinutes = "00"
-    timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
-   }
+        timerDisplay.innerHTML = `Time expired: ${displayMinutes}:${displaySeconds}`
+    }
+
+
 
    // fetch initial information
     function fetchIngredients(){
@@ -113,16 +145,19 @@ document.addEventListener("DOMContentLoaded", function(){
             case 3:
             case 4:
                 difficulty = "Easy"
+                seconds = 60
                 break;
             case 5:
             case 6:
             case 7:
                 difficulty = "Medium"
+                seconds = 45
                 break;
             case 8:
             case 9:
             case 10:
                 difficulty = "Hard"
+                seconds = 30
                 break; 
             default:
                 difficulty = "Easy"
@@ -130,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         recipeInfo.innerHTML = `<br><h5>Difficulty: ${difficulty}</h5>
         <h5>Number of Ingredients: ${size}</h5>`
+        recipeInfo.dataset.difficulty = difficulty
     }
 
     dropdown.addEventListener('change', function(e){
@@ -221,7 +257,6 @@ document.addEventListener("DOMContentLoaded", function(){
        } else if (e.target.id === "empty-button") {
            recipeGuess = []
            ingDrag.innerHTML = ''
-           
        } else if (e.target.className === "dlt-ing") {
            removeFromArray(e.target.dataset.name)
            removefromDOM(parseInt(e.target.id))
@@ -252,20 +287,28 @@ document.addEventListener("DOMContentLoaded", function(){
                 let rightIngred = recipeGuess.filter(guess => recipeCompare.includes(guess))
                 console.log(rightIngred)
                 message = message.concat(rightIngred)
+                // stopTimer()
+                // getDifficulty()
             } else {
                 // You have the right number and right ingredients
                 // check order
                 if (guessedArray === compareArray) {
                     message = "YOU DID IT! NICE JOB!"
+                    const timeTaken = seconds
+                    skillPoints(timeTaken)
                 } else {
                     // wrong order
                     message = "You have the right ingredients, but in the wrong order. These are ones you guessed correctly so far:"
                     let rightOrd = compareArrays(recipeGuess, recipeCompare)
                     message = message.concat(rightOrd)
+                    // stopTimer()
+                    // getDifficulty()
                 }
             }
         } else {
             message = "You don't have the right number of ingredients. Try again."
+            // stopTimer()
+            // getDifficulty()
         }
         
         renderModalContent(message)
