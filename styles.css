@@ -88,6 +88,7 @@ ul {
   -ms-flex: 1;
   flex: 1;
   font-size: small;
+  transition: transform .2s;
 }
 
 .ing-div:hover,
@@ -95,6 +96,7 @@ ul {
   color: black;
   text-decoration: none;
   cursor: grab;
+  transform: scale(1.5);
 }
 
 .ing-img {
