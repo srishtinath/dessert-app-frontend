@@ -9,8 +9,8 @@ let recipeGuess = []
 let recipeCompare = []
 let seconds = 60
 let minutes = 0
-let displaySeconds = 00
-let displayMinutes = 00
+let displaySeconds = "00"
+let displayMinutes = "00"
 let timer;
 let timeTaken;
 let skillPts = 0
@@ -282,6 +282,7 @@ document.addEventListener("DOMContentLoaded", function(){
             getDifficulty()
             displaySeconds = seconds
             timerDisplay.innerText = `Time remaining: ${displayMinutes}:${displaySeconds}`
+            timerOn()
         } else if (e.target.className === "dlt-ing") {
            removeFromArray(e.target.dataset.name)
            removefromDOM(parseInt(e.target.id))
@@ -348,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function(){
     function renderModalContent(string){
         modalText.textContent = string
         let modalBox = document.getElementsByClassName("modal-content")[0]
-        if (string === "YOU DID IT! NICE JOB!") {
+        if (string === "YOU DID IT! CONGRATULATIONS! You're ready to become a real patissier! Don't forget your pastry chef hat when applying to pastry school!") {
             modalBox.style.backgroundColor = "#f8a3b9"
         } else {
             modalBox.style.backgroundColor = "#8f7c5d"
