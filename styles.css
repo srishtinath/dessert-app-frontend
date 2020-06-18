@@ -27,7 +27,7 @@ ul {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 60%;
 }
 
 .instructions {
@@ -127,6 +127,8 @@ ul {
   position: relative;
   font-size: x-small;
   padding: 0px;
+  margin: 10px;
+  justify-content: center;
 }
 
 .dlt-ing{
@@ -134,14 +136,6 @@ ul {
   right: 1px;
 }
 
-
-.bowl-img {
-  max-width: 200px;
-  position: relative;
-  bottom: 10%;
-  left: 50%;
-  width: 300px;
-}
 
 .bake-sign {
   position: absolute;
@@ -246,4 +240,25 @@ button {
   left: 28%;
   opacity: 0.9;
   z-index: 1;
+}
+
+.guesses {
+  position: absolute;
+  color: #f8a3b9;
+  text-shadow: 1px 1px 1px white;
+  left: 4%;
+  top: 10%;
+}
+
+#cover {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  bottom: 0;
+  opacity: 1;
+  background-color: rgba(0,0,0, 0.5);;
+  z-index: 10;
 }

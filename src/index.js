@@ -20,8 +20,23 @@ const button = document.getElementById("baking-button")
 const resetTimer = document.getElementById("reset-timer")
 const pauseTimerButton = document.getElementById("pause-timer")
 const emptyBowl = document.getElementById("empty-button")
+let guessesNumber = 0
 
 document.addEventListener("DOMContentLoaded", function(){
+    // Number of tries
+    
+    function guessIncrement(){
+        guessesNumber ++;
+        let guessNode = document.getElementsByClassName('guess-number')[0]
+        guessNode.innerText = guessesNumber
+    }
+    
+    function resetGuesses(){
+        guessesNumber = 0
+        let guessNode = document.getElementsByClassName('guess-number')[0]
+        guessNode.innerText = guessesNumber
+    }
+    
     // Timer functions
 
     function startTimer(){
@@ -60,27 +75,35 @@ document.addEventListener("DOMContentLoaded", function(){
             
     
     function skillPoints(seconds){
-        if (seconds > 20 || seconds === 20){
+        if (seconds >= 20){
             skillPts = skillPts + 50
-            points.innerHTML = `${skillPts}`
         }
-        else if (seconds > 10 || seconds === 10 || seconds < 20){
+        else if (seconds >= 10 && seconds < 20){
             skillPts = skillPts + 20
-            points.innerHTML = `${skillPts}`
         }
-        else if (seconds > 5 || seconds < 10 || seconds === 5){
+        else if (seconds >= 5 && seconds < 10){
             skillPts = skillPts + 20
-            points.innerHTML = `${skillPts}`
         }
         else if (seconds === 0){
             skillPts = skillPts + 0
-            points.innerHTML = `${skillPts}`
         }
+
+        let skillPtsFromTries
+        if (guessesNumber === 1) {
+            skillPtsFromTries = 50;
+        } else if(guessesNumber > 1 && guessesNumber <= 5){
+            skillPtsFromTries = 60 + guessesNumber * (-10)
+        } else {
+            skillPtsFromTries = 0
+        }
+
+        skillPts = skillPts + skillPtsFromTries
+        points.innerHTML = `${skillPts}`
     }
 
     function timerOn(){
         timer = window.setInterval(startTimer, 1000)
-        resetTimer.disabled = false
+        // resetTimer.disabled = false
         pauseTimerButton.disabled = false
     }
 
@@ -138,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function(){
     function disableSubmit(){
         submit.disabled = true
         button.disabled = true
-        resetTimer.disabled = true
+        // resetTimer.disabled = true
         pauseTimerButton.disabled = true
         emptyBowl.disabled = true
     }
@@ -193,9 +216,8 @@ document.addEventListener("DOMContentLoaded", function(){
             renderDifficulty(recipe.difficulty_level, recipe.ingredients.length)
             button.disabled = false
             pauseTimer()
-            if (pauseTimerButton.innerText === "Resume Timer"){
-                pauseTimerButton.innerText = "Pause Timer"
-            }
+            resetGuesses()
+            cover.style.display = "block"
         })
         }
     })
@@ -203,7 +225,8 @@ document.addEventListener("DOMContentLoaded", function(){
     button.addEventListener('click', function(e){
         getDifficulty()
         timerOn()
-        button.disabled = true           
+        button.disabled = true 
+        cover.style.display = "none"          
         })
 
     document.addEventListener("dragstart", function(e){
@@ -278,11 +301,12 @@ document.addEventListener("DOMContentLoaded", function(){
         } else if(e.target.id === "pause-timer" && e.target.textContent === "Resume Timer") {
             timerOn()
             e.target.textContent = "Pause Timer"
-        } else if(e.target.id === "reset-timer") {
-            getDifficulty()
-            displaySeconds = seconds
-            timerDisplay.innerText = `Time remaining: ${displayMinutes}:${displaySeconds}`
-            timerOn()
+        // } else if(e.target.id === "reset-timer") {
+        //     getDifficulty()
+        //     displaySeconds = seconds
+        //     timerDisplay.innerText = `Time remaining: ${displayMinutes}:${displaySeconds}`
+        // timerOn()
+        
         } else if (e.target.className === "dlt-ing") {
            removeFromArray(e.target.dataset.name)
            removefromDOM(parseInt(e.target.id))
@@ -293,6 +317,8 @@ document.addEventListener("DOMContentLoaded", function(){
     let modal = document.getElementById("myModal");
     let modalText = document.getElementsByClassName("modal-text")[0]
     let btn = document.getElementById("submit-button");
+    let cover = document.getElementById('cover')
+
 
     function compareSubmission(){
         let guessedArray = JSON.stringify(recipeGuess)
@@ -310,22 +336,25 @@ document.addEventListener("DOMContentLoaded", function(){
                 message = "You have the right number but wrong ingredients. These are the correct ingredients so far:"
                 let rightIngred = recipeGuess.filter(guess => recipeCompare.includes(guess))
                 message = message.concat(rightIngred.join(" "))
-                
+                guessIncrement()
             } else {
                 // check order
                 if (guessedArray === compareArray) {
                     message = "YOU DID IT! CONGRATULATIONS! You're ready to become a real patissier! Don't forget your pastry chef hat when applying to pastry school!"
                     const timeTaken = seconds
                     skillPoints(timeTaken)
+                    resetGuesses()
                 } else {
                     // wrong order
                     message = "You have the right ingredients, but in the wrong order. These are ones you guessed correctly so far:"
                     let rightOrd = compareArrays(recipeGuess, recipeCompare)
                     message = message.concat(rightOrd.join(" "))
+                    guessIncrement()
                 }
             }
         } else {
             message = "You don't have the right number of ingredients. Try again."
+            guessIncrement()
         }
         
         renderModalContent(message)
@@ -376,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 modal.style.display = "none";
             }
         }
+        
     }
 
     modalElements()
